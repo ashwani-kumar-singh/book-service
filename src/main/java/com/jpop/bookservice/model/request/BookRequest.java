@@ -1,4 +1,4 @@
-package com.jpop.bookservice.model;
+package com.jpop.bookservice.model.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

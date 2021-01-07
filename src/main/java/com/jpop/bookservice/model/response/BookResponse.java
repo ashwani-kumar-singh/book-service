@@ -1,45 +1,48 @@
 package com.jpop.bookservice.model.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.jpop.bookservice.constant.BookStatusCode;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.http.HttpStatus;
+
+import java.util.Date;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @ToString(doNotUseGetters = true)
-@JsonIgnoreProperties(ignoreUnknown = true, value = {"status"}, allowGetters = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class BookResponse<T> {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class BookResponse {
 
-  private BookStatusCode status;
-  private T responseObject;
+    private Integer id;
 
-  @JsonIgnore
-  private HttpStatus statusCode;
+    private String title;
 
-  public BookResponse() {
-    this.statusCode = HttpStatus.OK;
-  }
+    private String description;
 
-  public BookResponse(T responseObject) {
-    this.responseObject = responseObject;
-    this.statusCode = HttpStatus.OK;
-  }
+    private String author;
 
-  public BookResponse(T responseObject, BookStatusCode status) {
-    this.responseObject = responseObject;
-    this.status = status;
-    this.statusCode = HttpStatus.OK;
-  }
+    private String category;
 
-  public BookResponse(BookStatusCode status) {
-    this.status = status;
-    this.statusCode = HttpStatus.OK;
-  }
+    @JsonProperty(value = "total_pages")
+    private int totalPages;
+
+    private int cost;
+
+    private String isbn;
+
+    @JsonProperty(value = "publisher_id")
+    private Integer publishedId;
+
+    @JsonProperty(value = "published_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date publishedDate;
 
 }

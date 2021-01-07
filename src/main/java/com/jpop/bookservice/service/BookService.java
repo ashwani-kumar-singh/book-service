@@ -1,21 +1,22 @@
 package com.jpop.bookservice.service;
 
 import com.jpop.bookservice.entity.Book;
-import com.jpop.bookservice.model.BookRequest;
+import com.jpop.bookservice.model.request.BookRequest;
 import com.jpop.bookservice.model.response.BookResponse;
+import com.jpop.bookservice.model.response.BookServiceResponse;
 import com.sun.istack.NotNull;
 import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface BookService {
-    BookResponse<Book> addBook(@NonNull Long userId, @NotNull BookRequest bookRequest);
+    BookServiceResponse<BookResponse> addBook(@NonNull Integer loggedIn, @NotNull BookRequest bookRequest);
 
-    BookResponse<Book> updateBook(@NotNull Long userId, @NotNull Integer bookId, @NotNull BookRequest bookRequest);
+    BookServiceResponse<BookResponse> updateBook(@NotNull Integer loggedIn, @NotNull Integer bookId, @NotNull BookRequest bookRequest);
 
-    BookResponse<Book> deleteBook(Integer bookId);
+    BookServiceResponse<Boolean> deleteBook(@NotNull Integer bookId);
 
-    BookResponse<Book> getBookDetails(Integer bookId);
+    BookServiceResponse<BookResponse> getBookDetails(@NotNull Integer bookId);
 
-    BookResponse<Page<Book>> getAllBooks(Pageable pageable);
+    BookServiceResponse<Page<BookResponse>> getAllBooks(Pageable pageable);
 }
