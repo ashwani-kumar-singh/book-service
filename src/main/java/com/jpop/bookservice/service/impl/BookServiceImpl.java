@@ -5,17 +5,12 @@ import com.jpop.bookservice.entity.Book;
 import com.jpop.bookservice.exception.BookServiceBaseException;
 import com.jpop.bookservice.model.request.BookRequest;
 import com.jpop.bookservice.model.response.BookResponse;
-import com.jpop.bookservice.model.response.BookServiceResponse;
 import com.jpop.bookservice.repository.BookRepository;
 import com.jpop.bookservice.service.BookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
@@ -31,77 +26,62 @@ public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
 
     @Override
-    public BookServiceResponse<BookResponse> getBookDetails(Integer bookId) {
-        BookServiceResponse<BookResponse> bookServiceResponse = new BookServiceResponse<>(BookStatusCode.FAILED);
+    public BookResponse getBookDetails(Integer bookId) {
         Optional<Book> bookOptional = bookRepository.findById(bookId);
+        BookResponse bookResponse;
         if(bookOptional.isPresent()){
-            BookResponse bookResponse = new BookResponse();
+            bookResponse = new BookResponse();
             BeanUtils.copyProperties(bookOptional.get(), bookResponse);
-            bookServiceResponse.setResponseObject(bookResponse);
-            bookServiceResponse.setStatus(BookStatusCode.SUCCESS);
         } else {
             throw new BookServiceBaseException(BookStatusCode.DATABASE_ERROR.getDesc());
         }
-        return bookServiceResponse;
+        return bookResponse;
     }
 
     @Override
-    public BookServiceResponse<Page<BookResponse>> getAllBooks(Pageable pageable) {
-        BookServiceResponse<Page<BookResponse>> bookServiceResponse = new BookServiceResponse<>(BookStatusCode.FAILED);
-        Page<Book> bookPage = bookRepository.findAll(pageable);
+    public List<BookResponse> getAllBooks() {
+        List<Book> bookPage = bookRepository.findAll();
         List<BookResponse> bookResponseList = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(bookPage.getContent())){
-            bookPage.getContent().forEach( user -> {
-                BookResponse userResponse = new BookResponse();
-                BeanUtils.copyProperties(user , userResponse);
-                bookResponseList.add(userResponse);
-            });
-        }
-        bookServiceResponse.setResponseObject(new PageImpl<>(bookResponseList, pageable, bookResponseList.size()));
-        bookServiceResponse.setStatus(BookStatusCode.SUCCESS);
-        return bookServiceResponse;
+        bookPage.forEach( user -> {
+            BookResponse userResponse = new BookResponse();
+            BeanUtils.copyProperties(user , userResponse);
+            bookResponseList.add(userResponse);
+        });
+        return bookResponseList;
     }
 
     @Override
-    public BookServiceResponse<BookResponse> addBook(Integer loggedIn, BookRequest bookRequest) {
-        BookServiceResponse<BookResponse> bookServiceResponse = new BookServiceResponse<>(BookStatusCode.FAILED);
+    public BookResponse addBook(Integer loggedIn, BookRequest bookRequest) {
         Book book = new Book();
         BeanUtils.copyProperties(bookRequest, book);
         book.setCreatedBy(loggedIn);
         BookResponse bookResponse =  new BookResponse();
         Book savedBook = bookRepository.save(book);
         BeanUtils.copyProperties(savedBook, bookResponse);
-        bookServiceResponse.setResponseObject(bookResponse);
-        bookServiceResponse.setStatus(BookStatusCode.SUCCESS);
-        return bookServiceResponse;
+        return bookResponse;
     }
 
     @Override
-    public BookServiceResponse<BookResponse> updateBook(Integer loggedIn, Integer bookId, BookRequest bookRequest) {
-        BookServiceResponse<BookResponse> bookServiceResponse = new BookServiceResponse<>(BookStatusCode.FAILED);
+    public BookResponse updateBook(Integer loggedIn, Integer bookId, BookRequest bookRequest) {
         Optional<Book> bookOptional = bookRepository.findById(bookId);
+        BookResponse bookResponse;
         if(bookOptional.isPresent()){
             Book book = bookOptional.get();
             BeanUtils.copyProperties(bookRequest, book);
             book.setUpdatedBy(loggedIn);
             Book savedBook = bookRepository.save(book);
-            BookResponse bookResponse = new BookResponse();
+            bookResponse = new BookResponse();
             BeanUtils.copyProperties(savedBook, bookResponse);
-            bookServiceResponse.setResponseObject(bookResponse);
-            bookServiceResponse.setStatus(BookStatusCode.SUCCESS);
         } else {
             throw new BookServiceBaseException(BookStatusCode.DATABASE_ERROR.getDesc());
         }
-        return bookServiceResponse;
+        return bookResponse;
     }
 
     @Override
-    public BookServiceResponse<Boolean> deleteBook(Integer bookId) {
-        BookServiceResponse bookServiceResponse = new BookServiceResponse(Boolean.FALSE, BookStatusCode.FAILED);
+    public boolean deleteBook(Integer bookId) {
         bookRepository.deleteById(bookId);
-        bookServiceResponse.setResponseObject(Boolean.TRUE);
-        bookServiceResponse.setStatus(BookStatusCode.SUCCESS);
-        return bookServiceResponse;
+        return true;
     }
 
 }
