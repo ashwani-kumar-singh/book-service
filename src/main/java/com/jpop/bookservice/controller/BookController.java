@@ -10,11 +10,13 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.List;
 
 @RestController
 @RefreshScope
+@EnableSwagger2
 @RequestMapping("v1/")
 @Slf4j
 public class BookController {
