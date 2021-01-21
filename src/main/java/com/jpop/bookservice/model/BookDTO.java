@@ -1,4 +1,4 @@
-package com.jpop.bookservice.model.request;
+package com.jpop.bookservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -19,7 +19,9 @@ import java.util.Date;
 @Builder
 @ToString(doNotUseGetters = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BookRequest {
+public class BookDTO {
+
+    private Integer id;
 
     private String title;
 

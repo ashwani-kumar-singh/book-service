@@ -1,20 +1,51 @@
 package com.jpop.bookservice.service;
 
-import com.jpop.bookservice.model.request.BookRequest;
-import com.jpop.bookservice.model.response.BookResponse;
-import com.sun.istack.NotNull;
-import lombok.NonNull;
+import com.jpop.bookservice.model.BookRequest;
+import com.jpop.bookservice.model.BookDTO;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * Service to handle book details request
+ */
 public interface BookService {
-    BookResponse addBook(@NonNull Integer loggedIn, @NotNull BookRequest bookRequest);
+    /**
+     * Create a book for given below request.
+     * @param loggedIn i.e. logged in
+     * @param bookRequest i.e. user request
+     * @return BookDTO i.e. returns newly created book.
+     */
+    BookDTO createBook(@NotNull(message = "logged in can not be null") Integer loggedIn,
+                       @NotNull(message = "book request can not be null") BookRequest bookRequest);
 
-    BookResponse updateBook(@NotNull Integer loggedIn, @NotNull Integer bookId, @NotNull BookRequest bookRequest);
+    /**
+     * Update a book for below request.
+     * @param loggedIn i.e. logged in user.
+     * @param bookId i.e. book id of book details to be updated.
+     * @param bookRequest i.e. book request.
+     * @return BookDTO i.e. returns newly created book.
+     */
+    BookDTO updateBook(@NotNull(message = "logged in can not be null")  Integer loggedIn,
+                       @NotNull(message = "book id can not be null")  Integer bookId,
+                       @NotNull(message = "book request can not be null")  BookRequest bookRequest);
 
-    boolean deleteBook(@NotNull Integer bookId);
+    /**
+     * Delete a book with given user id
+     * @param bookId i.e. book id.
+     */
+    void deleteBook(@NotNull(message = "book id can not be null") Integer bookId);
 
-    BookResponse getBookDetails(@NotNull Integer bookId);
+    /**
+     * Get user details
+     * @param bookId i.e. book id
+     * @return BookDTO i.e. book details
+     */
+    BookDTO getBookDetails(@NotNull(message = "book id can not be null") Integer bookId);
 
-    List<BookResponse> getAllBooks();
+    /**
+     * Get all Book Details.
+     * @return List<BookDTO> i.e. list of books with details.
+     */
+    List<BookDTO> getAllBooks();
 }
