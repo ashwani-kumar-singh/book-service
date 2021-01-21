@@ -37,7 +37,7 @@ public interface BookService {
     void deleteBook(@NotNull(message = "book id can not be null") Integer bookId);
 
     /**
-     * Get user details
+     * Get Book details
      * @param bookId i.e. book id
      * @return BookDTO i.e. book details
      */

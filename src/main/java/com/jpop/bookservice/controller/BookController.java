@@ -64,7 +64,7 @@ public class BookController {
      *
      * @param bookRequest the book request to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
-     *         body the new bookRequest, or with status {@code 500 (Internal Server Error)} if the
+     *         body the new BookDTO, or with status {@code 500 (Internal Server Error)} if the
      *         book has already an ID.
      */
     @PostMapping("books")
@@ -80,7 +80,7 @@ public class BookController {
      *
      * @param bookRequest the book request to update.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
-     *         body the new bookRequest, or with status {@code 500 (Internal Server Error)} if the
+     *         body the new BookDTO, or with status {@code 500 (Internal Server Error)} if the
      *         book does not exist with given id.
      */
     @PutMapping("books/{book_id}")
@@ -102,6 +102,7 @@ public class BookController {
      */
     @DeleteMapping("books/{book_id}")
     public ResponseEntity<Void> deleteBook(@PathVariable(value = "book_id") Integer bookId) {
+        log.debug("REST request to delete book details with id:{}", bookId);
         bookService.deleteBook(bookId);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
