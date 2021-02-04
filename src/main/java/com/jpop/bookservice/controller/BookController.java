@@ -5,6 +5,7 @@ import com.jpop.bookservice.model.BookDTO;
 import com.jpop.bookservice.service.BookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,9 @@ public class BookController {
 
     /*@Value("${user.role : Default Role General}")
     private String role;*/
+
+    @Value("${server.port}")
+    private String port;
 
     /**
      * {@code GET  books/{book_id}} : get the book details for the requested book id.
@@ -111,4 +115,10 @@ public class BookController {
     public String whoami(@PathVariable("username") String username) {
         return String.format("Hello! You're %s and you'll become a(n) %s...\n", username, role);
     }*/
+
+    @GetMapping(value = "test-ribbon/")
+    public String testRibbon() {
+        return String.format("Hello! Response coming from port: %s", port);
+    }
+
 }
